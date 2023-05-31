@@ -5,7 +5,7 @@ CMP_DIR = ./components
 TB_DIR  = ./testbench
 
 # archivos
-MAIN_FILE = tx_uart
+MAIN_FILE = lectura
 TB_FILE = $(MAIN_FILE)_tb
 VCD_FILE = $(TB_FILE).vcd
 
@@ -31,12 +31,12 @@ all: compile execute run view
 compile:
 	ghdl -a $(COMPILATION) $(CMP_DIR)/*.vhd
 	ghdl -a $(COMPILATION) $(SRC_DIR)/*.vhd
-	
+	ghdl -a $(COMPILATION) $(MAIN_DIR)/*.vhd
 	ghdl -a $(COMPILATION) $(TB_DIR)/*.vhd
 
 # order: cmp -> src -> main -> tb	
 backup:
-	ghdl -a $(COMPILATION) $(MAIN_DIR)/*.vhd
+	
 	
 	
 execute:
