@@ -1,0 +1,72 @@
+# When you add a MegaFunction or another entity to your design, simply add it to one of your private 
+# folders and Q2 will be happy and manage everything quite good. When you want to do versioning of 
+# your generated SOF/POF files, you can do this by redirecting the generated output to an own 
+# folder. 
+# 
+# To do this go to:
+# "Assignments"
+# -> "Settings
+# -> "Compilation Process Settings"
+# -> "Save project output files in specified directory"
+#
+# Now you can either place a .gitignore in the directory and allow the following list of types:
+# !*.sof
+# !*.pof
+# or you create an own submodule in the folder to keep binary files out of your
+# design.
+
+# Need to keep all HDL files
+# *.vhd
+# *.v
+
+
+
+# ESTO SI FUE TESTEADO
+
+# ignore GHDL generated files ---------------------------------------------------------------------
+*.cf
+*.vcd
+
+
+# ignore Quartus II generated files ---------------------------------------------------------------
+*.qpf
+*.qsf
+*.qar
+*.qws
+*.txt
+
+# ignore Quartus II generated folders -------------------------------------------------------------
+*/db/
+*/incremental_db/
+*/output_files/
+*/simulation/
+*/.qsys_edit/
+
+
+
+
+# ESTO NO FUE TESTEADO
+
+# ignore ModelSim generated files and directories (temp files and so on) --------------------------
+[_@]*
+
+# ignore compilation output of ModelSim
+*.mti
+*.dat
+*.dbs
+*.psm
+*.bak
+*.cmp
+*.jpg
+*.html
+*.bsf
+
+# ignore simulation output of ModelSim
+wlf*
+*.wlf
+*.vstf
+*.ucdb
+cov*/
+transcript*
+sc_dpiheader.h
+vsim.dbg
