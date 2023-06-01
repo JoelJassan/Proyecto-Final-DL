@@ -73,7 +73,7 @@ begin
     process (reset, rx_done)
     begin
         if (reset = '0') then
-            caracter_recibido <= '-';
+            caracter_recibido <= 'a';
 
         elsif rx_done = '1' then
             caracter_recibido <= character'val(to_integer(unsigned(dato)));
