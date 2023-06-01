@@ -3,13 +3,14 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 entity escribelcd_string is
-	--generic (
-	--	cadena : string
-	--);
+	generic (
+		cadena_e : string := "ON   ;";
+		cadena_a : string := "OFF  ;"
+	);
 
 	port (
 		clk, reset : in std_logic := '0';
-		cadena     : in string (1 to 6);
+		led_signal : in std_logic;
 
 		lcd_data                   : out std_logic_vector (7 downto 0);
 		lcd_enable, lcd_rw, lcd_rs : out std_logic
@@ -93,15 +94,19 @@ begin
 
 					-- LOGICA DE ESCRITURA --------------------------------------------------------
 				when escribe1c => estado := escribe_next_c;
+					if (led_signal = '0') then
+						LCD_DATA <= std_logic_vector(to_unsigned (character'pos(cadena_e(cnt)), 8));-- TRANSFORMO CADA ELEMENTO DEL STRING
+					elsif (led_signal = '1') then
+						LCD_DATA <= std_logic_vector(to_unsigned (character'pos(cadena_a(cnt)), 8));-- TRANSFORMO CADA ELEMENTO DEL STRING
+					end if;
 
-					LCD_DATA   <= std_logic_vector(to_unsigned (character'pos(cadena(cnt)), 8));-- TRANSFORMO CADA ELEMENTO DEL STRING
 					LCD_ENABLE <= '1';
 					LCD_RW     <= '0';
 					LCD_RS     <= '1';
 					cnt := cnt + 1;
 
 				when escribe_next_c =>
-					if cnt = (cadena'length) then
+					if cnt = (cadena_a'length) then
 						estado := fin;
 						cnt    := 1;
 					else
