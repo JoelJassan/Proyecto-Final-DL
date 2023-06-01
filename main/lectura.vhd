@@ -123,28 +123,28 @@ begin
         end case;
     end process;
 
-    process (clk_auxiliar) --genera un reset para el display
-    begin
-        case refresh is
-            when reposo =>
-                if cadena_anterior = cadena then
-                    refresh <= reposo;
-                else
-                    refresh <= carga_char;
-                end if;
-                refresh_reset <= '1';
-            when carga_char =>
-                refresh       <= rst0;
-                refresh_reset <= '1';
-            when rst0 =>
-                refresh         <= rst1;
-                refresh_reset   <= '0';
-                cadena_anterior <= cadena;
-            when rst1 =>
-                refresh       <= reposo;
-                refresh_reset <= '1';
-            when others =>
-                refresh <= reposo;
-        end case;
-    end process;
+    --process (clk_auxiliar) --genera un reset para el display
+    --begin
+    --    case refresh is
+    --        when reposo =>
+    --            if cadena_anterior = cadena then
+    --                refresh <= reposo;
+    --            else
+    --                refresh <= carga_char;
+    --            end if;
+    --            refresh_reset <= '1';
+    --        when carga_char =>
+    --            refresh       <= rst0;
+    --            refresh_reset <= '1';
+    --        when rst0 =>
+    --            refresh         <= rst1;
+    --            refresh_reset   <= '0';
+    --            cadena_anterior <= cadena;
+    --        when rst1 =>
+    --            refresh       <= reposo;
+    --            refresh_reset <= '1';
+    --        when others =>
+    --            refresh <= reposo;
+    --    end case;
+    --end process;
 end architecture;

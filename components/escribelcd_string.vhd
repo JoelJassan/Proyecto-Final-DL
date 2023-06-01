@@ -22,8 +22,9 @@ architecture a_escribelcd of escribelcd_string is
 begin
 
 	process (clk, reset) is
-		variable estado : mef;
-		variable cnt    : integer := 1;
+		variable estado              : mef;
+		variable cnt                 : integer   := 1;
+		variable led_signal_anterior : std_logic := '0';
 	begin
 		-- el comentario de la derecha se referencia por la otra mef (when estado_de_la_izquierda a comentario_de_la_derecha)
 		if (reset = '0') then
@@ -117,7 +118,12 @@ begin
 					end if;
 					-- LOGICA DE ESCRITURA --------------------------------------------------------
 
-				when others => estado := fin;--estado de espera hasta que se presione reset nuevamente
+				when others =>
+					if led_signal_anterior = led_signal then
+						estado := fin;--estado de espera hasta que se presione reset nuevamente
+					else
+						estado := escribe1c;
+					end if;
 			end case;
 		end if;
 	end process;
