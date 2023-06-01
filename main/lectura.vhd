@@ -84,11 +84,11 @@ begin
 
     display : entity work.LCD_String
         generic map(cadena_e, cadena_a)
-        port map(clk, reset, led_signal, lcd_data, lcd_enable, lcd_rw, lcd_rs);
+        port map(clk, reset and refresh_reset, led_signal, lcd_data, lcd_enable, lcd_rw, lcd_rs);
 
-    --contador_auxiliar : entity work.conta
-    --    generic map(0, 50000) --necesito un clk lento
-    --    port map(clk, reset, '1', clk_auxiliar, open);
+    contador_auxiliar : entity work.conta
+        generic map(0, 100000) --necesito un clk lento
+        port map(clk, reset, '1', clk_auxiliar, open);
     ----- Codigo ----------------------------------------------------------------------------------
     led <= led_signal;
 
@@ -96,7 +96,7 @@ begin
     process (reset, rx_done, dato)
     begin
         if (reset = '0') then
-            caracter_recibido <= 'e';
+            caracter_recibido <= 'a';
 
         elsif rx_done = '1' then
             caracter_recibido <= character'val(to_integer(unsigned(dato)));
@@ -108,35 +108,43 @@ begin
 
     process (caracter_recibido)
     begin
+
         case caracter_recibido is
             when e_char =>
                 led_signal <= '0';
+                cadena     <= cadena_e;
+
             when a_char =>
                 led_signal <= '1';
+                cadena     <= cadena_a;
+
             when r_char => --aqui activaria un flag para que transmita
             when others =>
         end case;
     end process;
 
-    --process (clk_auxiliar)
-    --begin
-    --    case refresh is
-    --        when reposo =>
-    --            if cadena_anterior = cadena then
-    --                refresh <= reposo;
-    --            else
-    --                refresh <= carga_char;
-    --            end if;
-    --        when carga_char =>
-    --            refresh         <= rst0;
-    --            cadena_anterior <= cadena;
-    --        when rst0 =>
-    --            refresh       <= rst1;
-    --            refresh_reset <= '0';
-    --        when rst1 =>
-    --            refresh       <= reposo;
-    --            refresh_reset <= '1';
-    --when others     => refresh     <= reposo;
-    --end case;
-    --end process;
+    process (clk_auxiliar) --genera un reset para el display
+    begin
+        case refresh is
+            when reposo =>
+                if cadena_anterior = cadena then
+                    refresh <= reposo;
+                else
+                    refresh <= carga_char;
+                end if;
+                refresh_reset <= '1';
+            when carga_char =>
+                refresh       <= rst0;
+                refresh_reset <= '1';
+            when rst0 =>
+                refresh         <= rst1;
+                refresh_reset   <= '0';
+                cadena_anterior <= cadena;
+            when rst1 =>
+                refresh       <= reposo;
+                refresh_reset <= '1';
+            when others =>
+                refresh <= reposo;
+        end case;
+    end process;
 end architecture;
