@@ -18,25 +18,26 @@ entity escribelcd_string is
 end escribelcd_string;
 
 architecture a_escribelcd of escribelcd_string is
-	type mef is (delay1, delay2, delay3, delay4, delay5, seteo, seteo1, on_off_control, reseteo, modoEntrada, escribe1c, escribe_next_c, fin);
+	type mef is (reset0, delay1, delay2, delay3, delay4, delay5, seteo, seteo1, on_off_control, reseteo, modoEntrada, escribe1c, escribe_next_c, fin);
 begin
 
-	process (clk, reset) is
+	process (clk, reset, led_signal) is
 		variable estado              : mef;
 		variable cnt                 : integer   := 1;
 		variable led_signal_anterior : std_logic := '0';
 	begin
 		-- el comentario de la derecha se referencia por la otra mef (when estado_de_la_izquierda a comentario_de_la_derecha)
 		if (reset = '0') then
-			estado := delay1; --(delay1)
-			LCD_DATA   <= "00000001";
-			LCD_ENABLE <= '0';
-			LCD_RW     <= '0';
-			LCD_RS     <= '0';
-			cnt := 0;
+			estado := reset0; --(delay1)
 
 		elsif (rising_edge(clk)) then
 			case estado is
+				when reset0 => estado := delay1;
+					LCD_DATA   <= "00000001";
+					LCD_ENABLE <= '0';
+					LCD_RW     <= '0';
+					LCD_RS     <= '0';
+					cnt                   := 0;
 				when delay1 => estado := seteo; --seteo del dysplay (delay1)
 					LCD_ENABLE <= '1';
 					LCD_RW     <= '0';
@@ -108,8 +109,9 @@ begin
 
 				when escribe_next_c =>
 					if cnt = (cadena_a'length) then
-						estado := fin;
-						cnt    := 1;
+						estado              := fin;
+						cnt                 := 1;
+						led_signal_anterior := led_signal;
 					else
 						estado := escribe1c;
 						LCD_ENABLE <= '0';
@@ -122,7 +124,7 @@ begin
 					if led_signal_anterior = led_signal then
 						estado := fin;--estado de espera hasta que se presione reset nuevamente
 					else
-						estado := escribe1c;
+						estado := reset0;
 					end if;
 			end case;
 		end if;

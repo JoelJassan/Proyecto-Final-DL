@@ -50,8 +50,8 @@ architecture a_lectura of lectura is
     constant a_char : character := 'a';
     constant r_char : character := 'r';
 
-    constant cadena_e : string := "ON   ;";
-    constant cadena_a : string := "OFF  ;";
+    constant cadena_e : string := "Motor:ON   ;";
+    constant cadena_a : string := "Motor:OFF  ;";
 
     ----- Signals (i: entrada, o:salida, s:señal intermedia)---------------------------------------
     -- receptor uart
@@ -74,7 +74,7 @@ architecture a_lectura of lectura is
     signal led_anterior    : std_logic;
     -- test
     signal slv_signal : std_logic_vector(data_lenght_rx - 1 downto 0);
-    signal cadena     : string (1 to 6);
+    signal cadena     : string (1 to 12);
 
 begin
     ----- Components ------------------------------------------------------------------------------
@@ -84,7 +84,7 @@ begin
 
     display : entity work.LCD_String
         generic map(cadena_e, cadena_a)
-        port map(clk, reset and refresh_reset, led_signal, lcd_data, lcd_enable, lcd_rw, lcd_rs);
+        port map(clk, reset, led_signal, lcd_data, lcd_enable, lcd_rw, lcd_rs);
 
     contador_auxiliar : entity work.conta
         generic map(0, 100000) --necesito un clk lento
