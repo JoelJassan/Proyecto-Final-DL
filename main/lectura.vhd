@@ -29,8 +29,8 @@ entity lectura is
         clk   : in std_logic;
         reset : in std_logic;
 
-        rx_UART_port         : in std_logic;
-        cadenas_iguales_test : out std_logic
+        rx_UART_port : in std_logic;
+        led          : out std_logic
         --output ports
         --dato_test : out std_logic_vector(data_lenght_rx - 1 downto 0)
 
@@ -42,21 +42,21 @@ architecture a_lectura of lectura is
 
     ----- Typedefs --------------------------------------------------------------------------------
 
-    type t_arreglo is array (0 to cantidad_caracteres - 1) of character;
-
     ----- Constants -------------------------------------------------------------------------------
-
-    constant texto_esperado : t_arreglo := ('H', 'O', 'L', 'A');
+    constant e_char : character := 'e';
+    constant a_char : character := 'a';
 
     ----- Signals (i: entrada, o:salida, s:señal intermedia)---------------------------------------
     -- receptor uart
     signal rx_done : std_logic;
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
 
-    signal arreglo_recibido : t_arreglo;
-    signal cadenas_iguales  : std_logic;
+    signal caracter_recibido : character;
+    signal led_signal        : std_logic := '1';
 
     signal cnt : integer := 0;
+
+    signal slv_signal : std_logic_vector(data_lenght_rx - 1 downto 0);
 
 begin
     ----- Components ------------------------------------------------------------------------------
@@ -65,31 +65,23 @@ begin
         port map(clk, reset, rx_UART_port, rx_done, dato);
 
     ----- Codigo ----------------------------------------------------------------------------------
-    --dato_test            <= dato;
-    cadenas_iguales_test <= cadenas_iguales;
+    led <= led_signal;
 
     -- Logica Estado Siguiente
     process (reset, rx_done)
     begin
         if (reset = '0') then
-            cnt <= 0;
+            caracter_recibido <= '-';
 
-        elsif (rising_edge(rx_done)) then
-            cnt                   <= cnt + 1;
-            arreglo_recibido(cnt) <= character'val(to_integer(unsigned(dato)));
-        end if;
-
-    end process;
-
-    -- Logica Salida
-    process (cnt)
-    begin
-        if cnt = 0 then
-            cadenas_iguales <= '0';
-
-        elsif cnt = 4 then
-            if (arreglo_recibido = texto_esperado) then
-                cadenas_iguales <= '1';
+        elsif rx_done = '1' then
+            caracter_recibido <= character'val(to_integer(unsigned(dato)));
+            ----------------------------------------------- tb
+            --slv_signal <= std_logic_vector(to_unsigned(character'pos(caracter_recibido), slv_signal'length));
+            ----------------------------------------------- tb
+            if (caracter_recibido = e_char) then
+                led_signal <= '0';
+            elsif (caracter_recibido = a_char) then
+                led_signal <= '1';
             end if;
         end if;
     end process;

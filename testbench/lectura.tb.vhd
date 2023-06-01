@@ -88,36 +88,36 @@ begin
         wait for 2 * tiempo_de_pulso;
 
         -- dato 1
-        data := x"48";
+        data := x"65";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
             rx_port <= data(i);
             wait for tiempo_de_pulso;
         end loop;
-        rx_port <= '1'; --start
+        rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
         -- dato 2
-        data := x"4F";
+        data := x"61";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
             rx_port <= data(i);
             wait for tiempo_de_pulso;
         end loop;
-        rx_port <= '1'; --start
+        rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
         -- dato 3
-        data := x"4C";
+        data := x"65";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
             rx_port <= data(i);
             wait for tiempo_de_pulso;
         end loop;
-        rx_port <= '1'; --start
+        rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
         -- dato 4
@@ -128,54 +128,7 @@ begin
             rx_port <= data(i);
             wait for tiempo_de_pulso;
         end loop;
-        rx_port <= '1'; --start
-        wait for tiempo_de_pulso;
-
-        wait;
-
-        -- dato 5
-        data := x"89";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --start
-        wait for tiempo_de_pulso;
-        --wait for tiempo_de_pulso;
-
-        -- dato 6
-        data := x"AB";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --start
-        wait for tiempo_de_pulso;
-
-        -- dato 7
-        data := x"CD";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --start
-        wait for tiempo_de_pulso;
-
-        -- dato 8
-        data := x"EF";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --start
+        rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
         wait;
