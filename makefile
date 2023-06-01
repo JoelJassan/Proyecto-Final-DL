@@ -51,6 +51,7 @@ view:
 vcd:
 	touch tmp.vcd
 
-clean: 
+#se podria agregar instruccion para entrar a vcd directamente
+clean:
 	rm *.vcd
 	rm work-obj08.cf

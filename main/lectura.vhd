@@ -41,21 +41,23 @@ end entity;
 architecture a_lectura of lectura is
 
     ----- Typedefs --------------------------------------------------------------------------------
-
+    type data_action is (a, e, r, aux);
     ----- Constants -------------------------------------------------------------------------------
     constant e_char : character := 'e';
     constant a_char : character := 'a';
+    constant r_char : character := 'r';
 
     ----- Signals (i: entrada, o:salida, s:señal intermedia)---------------------------------------
     -- receptor uart
     signal rx_done : std_logic;
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
 
+    --otros
     signal caracter_recibido : character;
     signal led_signal        : std_logic := '1';
+    signal dato_mef          : data_action;
 
-    signal cnt : integer := 0;
-
+    -- test
     signal slv_signal : std_logic_vector(data_lenght_rx - 1 downto 0);
 
 begin
@@ -78,12 +80,20 @@ begin
             ----------------------------------------------- tb
             --slv_signal <= std_logic_vector(to_unsigned(character'pos(caracter_recibido), slv_signal'length));
             ----------------------------------------------- tb
-            if (caracter_recibido = e_char) then
-                led_signal <= '0';
-            elsif (caracter_recibido = a_char) then
-                led_signal <= '1';
-            end if;
+
         end if;
+    end process;
+
+    process (caracter_recibido)
+    begin
+        case(caracter_recibido) is
+
+            when e_char => led_signal <= '0';
+            when a_char => led_signal <= '1';
+            when r_char => --aqui activaria un flag para que transmita
+            when others =>
+
+        end case;
     end process;
 
 end architecture;
