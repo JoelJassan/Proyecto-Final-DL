@@ -21,28 +21,36 @@ architecture a_lectura_tb of lectura_tb is
     ----- Typedefs --------------------------------------------------------------------------------
 
     ----- Constants -------------------------------------------------------------------------------
-    constant nbits_rx       : integer := 9;
-    constant cnt_max_rx     : integer := 325;
-    constant data_lenght_rx : integer := 8; --la mef de tx y rx no estan preparadas para cambiar cantidad
 
+    constant nbits_rx            : integer := 9;
+    constant cnt_max_rx          : integer := 325;
+    constant data_lenght_rx      : integer := 8; --la mef de tx y rx no estan preparadas para cambiar cantidad
+    constant cantidad_caracteres : integer := 4;
     ----- Simulation ------------------------------------------------------------------------------
+
+    constant simulation_time : time := 10 ms;
+
     constant clk_period      : time := 10 ns;
     constant reset_off_time  : time := 80 ns;
     constant enable_off_time : time := 100 ns;
-    constant simulation_time : time := 5000 ns;
+
+    constant tiempo_de_pulso : time := 103.958 us;
 
     ----- Signals (i: entrada, o:salida, s:señal intermedia) --------------------------------------
+
     signal clk_i, rst_i, enable_i : std_logic;
 
     --component inputs
-    signal rx_UART_port : std_logic;
+    signal rx_port : std_logic;
+
     --component outputs
+    signal cadenas_iguales : std_logic;
 
 begin
     ----- Component to validate -------------------------------------------------------------------
     leer : entity work.lectura
-        generic map(nbits_rx, cnt_max_rx, data_lenght_rx)
-        port map(clk_i, rst_i, rx_UART_port);
+        generic map(nbits_rx, cnt_max_rx, data_lenght_rx, cantidad_caracteres)
+        port map(clk_i, rst_i, rx_port, cadenas_iguales);
     ----- Code ------------------------------------------------------------------------------------
 
     -- clock stimulus
@@ -75,8 +83,103 @@ begin
     --
     --
     ejecucion : process
+        variable data : std_logic_vector (7 downto 0) := "11111111";
     begin
+        wait for 2 * tiempo_de_pulso;
+
+        -- dato 1
+        data := x"48";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --start
+        wait for tiempo_de_pulso;
+
+        -- dato 2
+        data := x"4F";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --start
+        wait for tiempo_de_pulso;
+
+        -- dato 3
+        data := x"4C";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --start
+        wait for tiempo_de_pulso;
+
+        -- dato 4
+        data := x"41";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --start
+        wait for tiempo_de_pulso;
+
         wait;
+
+        -- dato 5
+        data := x"89";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --start
+        wait for tiempo_de_pulso;
+        --wait for tiempo_de_pulso;
+
+        -- dato 6
+        data := x"AB";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --start
+        wait for tiempo_de_pulso;
+
+        -- dato 7
+        data := x"CD";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --start
+        wait for tiempo_de_pulso;
+
+        -- dato 8
+        data := x"EF";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --start
+        wait for tiempo_de_pulso;
+
+        wait;
+
     end process;
     --
     --
