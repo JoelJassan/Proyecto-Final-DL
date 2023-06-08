@@ -35,6 +35,12 @@
 *.qws
 *.txt
 
+*.qdf
+*.qar
+*.qarlog
+*.rpt
+
+
 # ignore Quartus II generated folders -------------------------------------------------------------
 */db/
 */incremental_db/
