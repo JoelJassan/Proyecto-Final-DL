@@ -13,10 +13,10 @@
 library ieee;
 use ieee.std_logic_1164.all;
 
-entity lectura_tb is
+entity control_lectura_tb is
 end entity;
 
-architecture a_lectura_tb of lectura_tb is
+architecture a_control_lectura_tb of control_lectura_tb is
 
     ----- Typedefs --------------------------------------------------------------------------------
 
@@ -48,7 +48,7 @@ architecture a_lectura_tb of lectura_tb is
 
 begin
     ----- Component to validate -------------------------------------------------------------------
-    leer : entity work.lectura
+    leer : entity work.control_lectura
         generic map(nbits_rx, cnt_max_rx, data_lenght_rx, cantidad_caracteres)
         port map(clk_i, rst_i, rx_port, cadenas_iguales);
     ----- Code ------------------------------------------------------------------------------------

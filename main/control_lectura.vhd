@@ -14,7 +14,7 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity lectura is
+entity control_lectura is
 
     generic (
         nbits_rx       : integer := 9;
@@ -30,17 +30,15 @@ entity lectura is
         reset : in std_logic;
 
         rx_UART_port : in std_logic;
-        led          : out std_logic;
         --output ports
-        lcd_data                   : out std_logic_vector (7 downto 0);
-        lcd_enable, lcd_rw, lcd_rs : out std_logic
-        --dato_test : out std_logic_vector(data_lenght_rx - 1 downto 0)
+        led          : out std_logic;
+        tx_UART_port : out std_logic
 
     );
 
 end entity;
 
-architecture a_lectura of lectura is
+architecture a_control_lectura of control_lectura is
 
     ----- Typedefs --------------------------------------------------------------------------------
     type data_action is (a, e, r, aux);
@@ -60,20 +58,11 @@ architecture a_lectura of lectura is
 
     --otros
     signal caracter_recibido : character;
-    signal caracter          : character;
-
     signal led_signal : std_logic := '1';
 
-    --signal dato_mef          : data_action;
     signal refresh : display_refresh;
 
-    -- auxiliares
-    signal refresh_reset   : std_logic;
-    signal clk_auxiliar    : std_logic;
-    signal cadena_anterior : string (1 to 6);
-    signal led_anterior    : std_logic;
     -- test
-    signal slv_signal : std_logic_vector(data_lenght_rx - 1 downto 0);
     signal cadena     : string (1 to 12);
 
 begin
@@ -82,13 +71,6 @@ begin
         generic map(nbits_rx, cnt_max_rx, data_lenght_rx)
         port map(clk, reset, rx_UART_port, rx_done, dato);
 
-    display : entity work.LCD_String
-        generic map(cadena_e, cadena_a)
-        port map(clk, reset, led_signal, lcd_data, lcd_enable, lcd_rw, lcd_rs);
-
-    contador_auxiliar : entity work.conta
-        generic map(0, 100000) --necesito un clk lento
-        port map(clk, reset, '1', clk_auxiliar, open);
     ----- Codigo ----------------------------------------------------------------------------------
     led <= led_signal;
 
@@ -100,9 +82,7 @@ begin
 
         elsif rx_done = '1' then
             caracter_recibido <= character'val(to_integer(unsigned(dato)));
-            ----------------------------------------------- tb
-            --slv_signal <= std_logic_vector(to_unsigned(character'pos(caracter_recibido), slv_signal'length));
-            ----------------------------------------------- tb
+
         end if;
     end process;
 
@@ -122,29 +102,4 @@ begin
             when others =>
         end case;
     end process;
-
-    --process (clk_auxiliar) --genera un reset para el display
-    --begin
-    --    case refresh is
-    --        when reposo =>
-    --            if cadena_anterior = cadena then
-    --                refresh <= reposo;
-    --            else
-    --                refresh <= carga_char;
-    --            end if;
-    --            refresh_reset <= '1';
-    --        when carga_char =>
-    --            refresh       <= rst0;
-    --            refresh_reset <= '1';
-    --        when rst0 =>
-    --            refresh         <= rst1;
-    --            refresh_reset   <= '0';
-    --            cadena_anterior <= cadena;
-    --        when rst1 =>
-    --            refresh       <= reposo;
-    --            refresh_reset <= '1';
-    --        when others =>
-    --            refresh <= reposo;
-    --    end case;
-    --end process;
 end architecture;
