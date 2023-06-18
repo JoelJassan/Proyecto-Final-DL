@@ -21,7 +21,7 @@ entity control_lectura is
         cnt_max_rx     : integer := 325;
         data_lenght_rx : integer := 8; --la mef de tx y rx no estan preparadas para cambiar cantidad
 
-        cantidad_caracteres : integer := 4
+        cnt_max : integer := 5000000
     );
 
     port (
@@ -29,10 +29,10 @@ entity control_lectura is
         clk   : in std_logic;
         reset : in std_logic;
 
-        rx_UART_port : in std_logic;
+        rx_port : in std_logic;
+
         --output ports
-        led          : out std_logic;
-        tx_UART_port : out std_logic
+        led : out std_logic
 
     );
 
@@ -41,48 +41,48 @@ end entity;
 architecture a_control_lectura of control_lectura is
 
     ----- Typedefs --------------------------------------------------------------------------------
-    type data_action is (a, e, r, aux);
-    type display_refresh is (carga_char, rst0, rst1, reposo);
+
     ----- Constants -------------------------------------------------------------------------------
     constant e_char : character := 'e';
     constant a_char : character := 'a';
     constant r_char : character := 'r';
 
-    constant cadena_e : string := "Motor:ON   ;";
-    constant cadena_a : string := "Motor:OFF  ;";
+    -- constant cadena_e : string := "Motor:ON       ;";
+    -- constant cadena_a : string := "Motor:OFF      ;";
 
     ----- Signals (i: entrada, o:salida, s:señal intermedia)---------------------------------------
     -- receptor uart
     signal rx_done : std_logic;
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
 
-    --otros
+    -- otros
     signal caracter_recibido : character;
+    --signal cadena_recibida : string (1 to 17);
     signal led_signal : std_logic := '1';
-
-    signal refresh : display_refresh;
-
-    -- test
-    signal cadena     : string (1 to 12);
 
 begin
     ----- Components ------------------------------------------------------------------------------
     receptor : entity work.rx_uart
         generic map(nbits_rx, cnt_max_rx, data_lenght_rx)
-        port map(clk, reset, rx_UART_port, rx_done, dato);
+        port map(clk, reset, rx_port, rx_done, dato);
 
     ----- Codigo ----------------------------------------------------------------------------------
-    led <= led_signal;
 
-    -- Logica Estado Siguiente
-    process (reset, rx_done, dato)
+    process (clk, reset, rx_done, dato)
+        variable cnt_fin_cadena : integer := 0;
     begin
         if (reset = '0') then
             caracter_recibido <= 'a';
+            --cnt_fin_cadena := 0;
 
         elsif rx_done = '1' then
+            --cnt_fin_cadena := 0;
             caracter_recibido <= character'val(to_integer(unsigned(dato)));
 
+        elsif (rising_edge(clk)) then
+            if cnt_fin_cadena > 100 then
+                --cnt_fin_cadena := 10;
+            end if;
         end if;
     end process;
 
@@ -92,14 +92,16 @@ begin
         case caracter_recibido is
             when e_char =>
                 led_signal <= '0';
-                cadena     <= cadena_e;
 
             when a_char =>
                 led_signal <= '1';
-                cadena     <= cadena_a;
 
-            when r_char => --aqui activaria un flag para que transmita
             when others =>
+
         end case;
     end process;
+
+    -- Logica de salida
+    led <= led_signal;
+
 end architecture;

@@ -22,10 +22,10 @@ architecture a_control_lectura_tb of control_lectura_tb is
 
     ----- Constants -------------------------------------------------------------------------------
 
-    constant nbits_rx            : integer := 9;
-    constant cnt_max_rx          : integer := 325;
-    constant data_lenght_rx      : integer := 8; --la mef de tx y rx no estan preparadas para cambiar cantidad
-    constant cantidad_caracteres : integer := 4;
+    constant nbits_rx       : integer := 9;
+    constant cnt_max_rx     : integer := 325;
+    constant data_lenght_rx : integer := 8; --la mef de tx y rx no estan preparadas para cambiar cantidad
+    constant cnt_max        : integer := 5000000;
     ----- Simulation ------------------------------------------------------------------------------
 
     constant simulation_time : time := 10 ms;
@@ -44,13 +44,12 @@ architecture a_control_lectura_tb of control_lectura_tb is
     signal rx_port : std_logic;
 
     --component outputs
-    signal cadenas_iguales : std_logic;
-
+    signal led : std_logic;
 begin
     ----- Component to validate -------------------------------------------------------------------
     leer : entity work.control_lectura
-        generic map(nbits_rx, cnt_max_rx, data_lenght_rx, cantidad_caracteres)
-        port map(clk_i, rst_i, rx_port, cadenas_iguales);
+        generic map(nbits_rx, cnt_max_rx, data_lenght_rx, cnt_max)
+        port map(clk_i, rst_i, rx_port, led);
     ----- Code ------------------------------------------------------------------------------------
 
     -- clock stimulus
@@ -85,7 +84,7 @@ begin
     ejecucion : process
         variable data : std_logic_vector (7 downto 0) := "11111111";
     begin
-        wait for 2 * tiempo_de_pulso;
+        wait for 11 * tiempo_de_pulso;
 
         -- dato 1
         data := x"65";
@@ -109,6 +108,7 @@ begin
         rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
+        wait;
         -- dato 3
         data := x"65";
         rx_port <= '0'; --start
