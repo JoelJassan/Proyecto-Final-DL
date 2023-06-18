@@ -87,7 +87,7 @@ begin
         wait for 11 * tiempo_de_pulso;
 
         -- dato 1
-        data := x"65";
+        data := x"61";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
@@ -107,8 +107,7 @@ begin
         end loop;
         rx_port <= '1'; --end
         wait for tiempo_de_pulso;
-
-        wait;
+        --wait;
         -- dato 3
         data := x"65";
         rx_port <= '0'; --start
@@ -119,9 +118,9 @@ begin
         end loop;
         rx_port <= '1'; --end
         wait for tiempo_de_pulso;
-
+        --wait;
         -- dato 4
-        data := x"41";
+        data := x"61";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop

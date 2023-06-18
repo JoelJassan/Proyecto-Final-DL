@@ -21,7 +21,7 @@ entity control_lectura is
         cnt_max_rx     : integer := 325;
         data_lenght_rx : integer := 8; --la mef de tx y rx no estan preparadas para cambiar cantidad
 
-        cnt_max : integer := 5000000
+        cnt_max : integer := 50000000
     );
 
     port (
@@ -32,7 +32,8 @@ entity control_lectura is
         rx_port : in std_logic;
 
         --output ports
-        led : out std_logic
+        led     : out std_logic;
+        led_end : out std_logic
 
     );
 
@@ -56,9 +57,12 @@ architecture a_control_lectura of control_lectura is
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
 
     -- otros
-    signal caracter_recibido : character;
-    --signal cadena_recibida : string (1 to 17);
-    signal led_signal : std_logic := '1';
+    signal caracter_recibido   : character;
+    signal caracter_recibido_s : character;
+    --signal cadena_recibida   : string (1 to 17);
+    --signal cadena_recibida_s : string (1 to 17);
+    signal led_s     : std_logic := '1';
+    signal led_end_s : std_logic := '1';
 
 begin
     ----- Components ------------------------------------------------------------------------------
@@ -69,21 +73,28 @@ begin
     ----- Codigo ----------------------------------------------------------------------------------
 
     process (clk, reset, rx_done, dato)
-        variable cnt_fin_cadena : integer := 0;
+        variable cnt_fin_cadena : integer := 10;
     begin
-        if (reset = '0') then
-            caracter_recibido <= 'a';
-            --cnt_fin_cadena := 0;
 
-        elsif rx_done = '1' then
-            --cnt_fin_cadena := 0;
-            caracter_recibido <= character'val(to_integer(unsigned(dato)));
+        if (reset = '0') then
+            cnt_fin_cadena := 0;
+            caracter_recibido <= 'a';
+
+        elsif (rx_done = '1') then
+            cnt_fin_cadena := 0;
+            caracter_recibido_s <= character'val(to_integer(unsigned(dato)));
 
         elsif (rising_edge(clk)) then
-            if cnt_fin_cadena > 100 then
-                --cnt_fin_cadena := 10;
+            caracter_recibido <= caracter_recibido_s;
+            if cnt_fin_cadena < cnt_max then
+                led_end_s <= '1';
+                cnt_fin_cadena := cnt_fin_cadena + 1;
+            else
+                led_end_s <= '0';
             end if;
+
         end if;
+
     end process;
 
     process (caracter_recibido)
@@ -91,17 +102,19 @@ begin
 
         case caracter_recibido is
             when e_char =>
-                led_signal <= '0';
+                led_s <= '0';
 
             when a_char =>
-                led_signal <= '1';
+                led_s <= '1';
 
             when others =>
+                --mantiene el ultimo estado si no hay coincidencia
 
         end case;
     end process;
 
     -- Logica de salida
-    led <= led_signal;
+    led     <= led_s;
+    led_end <= led_end_s;
 
 end architecture;
