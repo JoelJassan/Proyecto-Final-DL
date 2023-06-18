@@ -21,7 +21,7 @@ entity control_lectura is
         cnt_max_rx     : integer := 325;
         data_lenght_rx : integer := 8; --la mef de tx y rx no estan preparadas para cambiar cantidad
 
-        cnt_max : integer := 50000000
+        cnt_max : integer := 1000000
     );
 
     port (
@@ -44,14 +44,10 @@ architecture a_control_lectura of control_lectura is
     ----- Typedefs --------------------------------------------------------------------------------
 
     ----- Constants -------------------------------------------------------------------------------
-    constant e_char : character := 'e';
-    constant a_char : character := 'a';
-    constant r_char : character := 'r';
+    constant cadena_e : string := "on1";
+    constant cadena_a : string := "of1";
 
-    -- constant cadena_e : string := "Motor:ON       ;";
-    -- constant cadena_a : string := "Motor:OFF      ;";
-
-    ----- Signals (i: entrada, o:salida, s:señal intermedia)---------------------------------------
+    ----- Signals ---------------------------------------------------------------------------------
     -- receptor uart
     signal rx_done : std_logic;
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
@@ -59,10 +55,16 @@ architecture a_control_lectura of control_lectura is
     -- procesamiento
     signal caracter_recibido   : character;
     signal caracter_recibido_s : character;
-    --signal cadena_recibida   : string (1 to 17);
-    --signal cadena_recibida_s : string (1 to 17);
-    signal led_s     : std_logic := '1';
-    signal led_end_s : std_logic := '1';
+
+    signal cadena_recibida   : string (1 to cadena_e'length);
+    signal cadena_recibida_s : string (1 to cadena_e'length);
+
+    signal led_s : std_logic := '1';
+    --signal led_end_s : std_logic := '1';
+
+    -- contadores
+    --signal cnt_fin_cadena  : integer range 0 to cnt_max;
+    signal caracter_cadena : integer := cadena_e'length;
 
 begin
     ----- Components ------------------------------------------------------------------------------
@@ -72,51 +74,46 @@ begin
 
     ----- Codigo ----------------------------------------------------------------------------------
 
-    -- Entradas
-    process (rx_done, dato)
-    begin
-        if rx_done = '0' then
-            caracter_recibido_s <= character'val(to_integer(unsigned(dato)));
-        end if;
-    end process;
-
-    -- Logica de salida
     process (clk, reset)
-        variable cnt_fin_cadena : integer range 0 to cnt_max;
     begin
 
         if reset = '0' then
-            cnt_fin_cadena := 0;
-            caracter_recibido <= 'a';
-
+            cadena_recibida <= cadena_a;
         elsif (rising_edge(clk)) then
-
-            caracter_recibido <= caracter_recibido_s;
-
-            -- LED on/off
-            if caracter_recibido = e_char then
-                led_s <= '0';
-            elsif caracter_recibido = a_char then
-                led_s <= '1';
-            end if;
-
-            -- Fin cadena
-            if rx_done = '1' then
-                cnt_fin_cadena := 0;
-
-            elsif cnt_fin_cadena < cnt_max then
-                cnt_fin_cadena := cnt_fin_cadena + 1;
-                led_end_s <= '1';
-
-            else
-                led_end_s <= '0';
-            end if;
-
+            cadena_recibida (caracter_cadena) <= character'val(to_integer(unsigned(dato)));
+            --cadena_recibida <= cadena_recibida_s;
         end if;
+    end process;
+
+    --LED on/off
+    process (cadena_recibida)
+    begin
+        if cadena_recibida = cadena_e then
+            led_s <= '0';
+        elsif cadena_recibida = cadena_a then
+            led_s <= '1';
+        else
+        end if;
+    end process;
+
+    process (rx_done)
+    begin
+
+        if rx_done = '1' then --debe estar con 1, porque falla
+            if (caracter_cadena < (cadena_recibida'length)) then
+                caracter_cadena <= caracter_cadena + 1;
+            else
+                caracter_cadena <= 1;
+                --cadena_recibida <= cadena_recibida_s;
+            end if;
+        end if;
+
+        --cadena_recibida_s (caracter_cadena) <= character'val(to_integer(unsigned(dato)));
 
     end process;
 
+    -- Conexion de señales
     led     <= led_s;
-    led_end <= led_end_s;
+    led_end <= '1';--led_end_s;
 
 end architecture;
