@@ -56,7 +56,7 @@ architecture a_control_lectura of control_lectura is
     signal rx_done : std_logic;
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
 
-    -- otros
+    -- procesamiento
     signal caracter_recibido   : character;
     signal caracter_recibido_s : character;
     --signal cadena_recibida   : string (1 to 17);
@@ -72,23 +72,42 @@ begin
 
     ----- Codigo ----------------------------------------------------------------------------------
 
-    process (clk, reset, rx_done, dato)
-        variable cnt_fin_cadena : integer := 10;
+    -- Entradas
+    process (rx_done, dato)
+    begin
+        if rx_done = '0' then
+            caracter_recibido_s <= character'val(to_integer(unsigned(dato)));
+        end if;
+    end process;
+
+    -- Logica de salida
+    process (clk, reset)
+        variable cnt_fin_cadena : integer range 0 to cnt_max;
     begin
 
-        if (reset = '0') then
+        if reset = '0' then
             cnt_fin_cadena := 0;
             caracter_recibido <= 'a';
 
-        elsif (rx_done = '1') then
-            cnt_fin_cadena := 0;
-            caracter_recibido_s <= character'val(to_integer(unsigned(dato)));
-
         elsif (rising_edge(clk)) then
+
             caracter_recibido <= caracter_recibido_s;
-            if cnt_fin_cadena < cnt_max then
-                led_end_s <= '1';
+
+            -- LED on/off
+            if caracter_recibido = e_char then
+                led_s <= '0';
+            elsif caracter_recibido = a_char then
+                led_s <= '1';
+            end if;
+
+            -- Fin cadena
+            if rx_done = '1' then
+                cnt_fin_cadena := 0;
+
+            elsif cnt_fin_cadena < cnt_max then
                 cnt_fin_cadena := cnt_fin_cadena + 1;
+                led_end_s <= '1';
+
             else
                 led_end_s <= '0';
             end if;
@@ -97,23 +116,6 @@ begin
 
     end process;
 
-    process (caracter_recibido)
-    begin
-
-        case caracter_recibido is
-            when e_char =>
-                led_s <= '0';
-
-            when a_char =>
-                led_s <= '1';
-
-            when others =>
-                --mantiene el ultimo estado si no hay coincidencia
-
-        end case;
-    end process;
-
-    -- Logica de salida
     led     <= led_s;
     led_end <= led_end_s;
 
