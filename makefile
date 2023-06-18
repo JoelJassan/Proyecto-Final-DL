@@ -7,7 +7,7 @@ TB_DIR  = ./testbench
 # archivos
 MAIN_FILE = control_lectura
 TB_FILE = $(MAIN_FILE)_tb
-VCD_FILE = $(TB_FILE).vcd
+VCD_FILE = $(TB_FILE).ghw
 
 # extensiones
 EXT = .vhd
@@ -43,7 +43,7 @@ execute:
 	ghdl -e $(COMPILATION) $(TB_FILE)
 
 run:
-	ghdl -r $(COMPILATION) $(TB_FILE) $(GHDL_SIM_TIME) --vcd=$(MAIN_FILE)_tb.vcd
+	ghdl -r $(COMPILATION) $(TB_FILE) $(GHDL_SIM_TIME) --wave=$(MAIN_FILE)_tb.ghw
 
 view:
 	gtkwave $(VCD_FILE)
