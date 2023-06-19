@@ -45,6 +45,7 @@ architecture a_rx_uart of rx_uart is
 
     -- reloj (clk lento)
     signal clk_9600 : std_logic;
+	signal dato_s : std_logic_vector (data_lenght - 1 downto 0);
 
     -- mef uart
 
@@ -56,12 +57,13 @@ begin
         port map(clk, reset, clk_9600, open);
 
     receptor : entity work.rx_uart_mef
-        port map(clk_9600, reset, rx, rx_done, dato);
+        port map(clk_9600, reset, rx, rx_done, dato_s);
 
     ----- Codigo ----------------------------------------------------------------------------------
 
     -- Logica Estado Siguiente
 
     -- Logica Salida
+	dato <= dato_s;
 
 end architecture;
