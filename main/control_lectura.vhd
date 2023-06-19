@@ -44,8 +44,8 @@ architecture a_control_lectura of control_lectura is
     ----- Typedefs --------------------------------------------------------------------------------
 
     ----- Constants -------------------------------------------------------------------------------
-    constant cadena_e : string := "encendiDA";
-    constant cadena_a : string := "apagadoDA";
+    constant cadena_e : string := "encendiDA"; -- DA lo manda la aplicacion
+    constant cadena_a : string := "apagadoDA"; -- DA lo manda la aplicacion
 
     constant bits_final_trama : integer := 2;
     constant longitud_cadena  : integer := cadena_e'length - bits_final_trama;
@@ -56,11 +56,7 @@ architecture a_control_lectura of control_lectura is
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
 
     -- procesamiento
-    --signal caracter_recibido   : character;
-    --signal caracter_recibido_s : character;
-
     signal cadena_recibida : string (1 to cadena_e'length);
-    --signal cadena_recibida_s : string (1 to cadena_e'length);
 
     signal led_s     : std_logic := '1';
     signal led_end_s : std_logic := '1';
@@ -89,6 +85,7 @@ begin
 
             cadena_recibida (caracter_cadena) <= character'val(to_integer(unsigned(dato)));
 
+            -- contador fin de cadena
             if rx_done = '1' then
                 contador_fin_cadena <= 0;
                 led_end_s           <= '1';
@@ -119,22 +116,17 @@ begin
     process (rx_done)
     begin
 
-        if rx_done = '1' then --and contador_fin_cadena < cnt_max then --debe estar con 1, porque falla en placa
+        if rx_done = '1' then -- debe estar con 1, porque falla en placa
             caracter_cadena <= caracter_cadena + 1;
             if (caracter_cadena >= (cadena_recibida'length)) then
                 caracter_cadena <= 1;
 
-                --else
-                --
-                --end if;
-                --elsif contador_fin_cadena >= cnt_max then
-                --    caracter_cadena <= 1;
             end if;
         end if;
     end process;
 
     -- Conexion de señales
     led     <= led_s;
-    led_end <= led_end_s;--led_end_s;
+    led_end <= led_end_s;
 
 end architecture;
