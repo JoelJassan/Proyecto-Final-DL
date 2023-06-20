@@ -6,12 +6,12 @@ use ieee.numeric_std.all;
 
 entity LCD_String is
     generic (
-        longitud_cadena : integer := 10
+        cantidad_de_leds : integer := 4
     );
 
     port (
         clk, reset : in std_logic := '0';
-        cadena     : in string (1 to longitud_cadena); -- aqui si debe ingresar "cadena"
+        leds_array : in std_logic_vector(cantidad_de_leds - 1 downto 0);
 
         lcd_data                   : out std_logic_vector (7 downto 0);
         lcd_enable, lcd_rw, lcd_rs : out std_logic
@@ -20,9 +20,10 @@ end LCD_String;
 
 architecture a_sw_lcd of LCD_String is
 
+    constant longitud_cadena : integer := 80;
+
     signal clks     : std_logic;
     signal pantalla : string (1 to longitud_cadena);
-
 begin
 
     conta1 : entity work.conta
@@ -36,6 +37,4 @@ begin
     -- MODIFICACION JOEL
 
     -- esto equivale a una mef futura
-    pantalla <= cadena;
-
 end a_sw_lcd;
