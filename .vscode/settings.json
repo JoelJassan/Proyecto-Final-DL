@@ -1,0 +1,47 @@
+{
+    "editor.codeActionsOnSave": {
+      "source.fixAll": true
+    },
+    "git.confirmSync": false,
+    "workbench.colorTheme": "Visual Studio Dark - C++",
+  
+    "editor.formatOnSave": true,
+    "[c]": {
+      "editor.defaultFormatter": "ms-vscode.cpptools",
+      "editor.wordBasedSuggestions": false,
+      "editor.suggest.insertMode": "replace",
+      "editor.semanticHighlighting.enabled": true
+    },
+    "prettier.printWidth": 100,
+  
+    "[vhdl]": {
+      "editor.defaultFormatter": "Vinrobot.vhdl-formatter",
+    },
+    
+    "[python]": {
+      "editor.defaultFormatter": "ms-python.black-formatter",
+      "editor.formatOnSave": true
+    },
+    "python.formatting.provider": "none",
+    
+    "ceedlingExplorer.debugConfiguration": "Debug (Local)",
+    "files.exclude": {
+      "**/*.pyc": {
+        "when": "$(basename).py"
+      },
+      "**/__pycache__": true,
+      ".pytest_cache": true,
+      ".coverage": true
+    },
+    
+    "vhdl.formatter.align.all": true,
+    "vhdl.formatter.align.function": true,
+    "vhdl.formatter.align.generic": true,
+    "vhdl.formatter.align.port": true,
+    "vhdl.formatter.align.procedure": true,
+    "vhdl.formatter.case.keyword": "LowerCase",
+    "vhdl.formatter.case.typename": "LowerCase",
+    "prettier.arrowParens": "avoid",
+    
+  }
+  
