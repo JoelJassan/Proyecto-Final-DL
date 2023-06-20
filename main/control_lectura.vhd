@@ -32,8 +32,15 @@ entity control_lectura is
         rx_port : in std_logic;
 
         --output ports
-        led     : out std_logic;
-        led_end : out std_logic
+        --led     : out std_logic;
+        led_end  : out std_logic;
+        buzzer   : out std_logic;
+        digito_1 : out std_logic;
+
+        led_1 : out std_logic;
+        led_2 : out std_logic;
+        led_3 : out std_logic;
+        led_4 : out std_logic
 
     );
 
@@ -44,11 +51,21 @@ architecture a_control_lectura of control_lectura is
     ----- Typedefs --------------------------------------------------------------------------------
 
     ----- Constants -------------------------------------------------------------------------------
-    constant cadena_e : string := "encendiDA"; -- DA lo manda la aplicacion
-    constant cadena_a : string := "apagadoDA"; -- DA lo manda la aplicacion
+    --constant cadena_e : string := "encendiDA"; -- DA lo manda la aplicacion
+    --constant cadena_a : string := "apagadoDA"; -- DA lo manda la aplicacion
+    constant led_1_on     : string := "led 1 onDA";
+    constant led_1_off    : string := "led 1 ofDA";
+    constant led_2_on     : string := "led 2 onDA";
+    constant led_2_off    : string := "led 2 ofDA";
+    constant led_3_on     : string := "led 3 onDA";
+    constant led_3_off    : string := "led 3 ofDA";
+    constant led_4_on     : string := "led 4 onDA";
+    constant led_4_off    : string := "led 4 ofDA";
+    constant All_leds_On  : string := "AlledsOnDA";
+    constant All_leds_Off : string := "AlledsOfDA";
 
     constant bits_final_trama : integer := 2;
-    constant longitud_cadena  : integer := cadena_e'length - bits_final_trama;
+    constant longitud_cadena  : integer := (led_1_on'length - bits_final_trama);
 
     ----- Signals ---------------------------------------------------------------------------------
     -- receptor uart
@@ -56,14 +73,14 @@ architecture a_control_lectura of control_lectura is
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
 
     -- procesamiento
-    signal cadena_recibida : string (1 to cadena_e'length);
+    signal cadena_recibida : string (1 to (longitud_cadena + bits_final_trama));
 
     signal led_s     : std_logic := '1';
     signal led_end_s : std_logic := '1';
 
     -- contadores
     signal contador_fin_cadena : integer range 0 to cnt_max;
-    signal caracter_cadena     : integer := cadena_e'length;
+    signal caracter_cadena     : integer := (longitud_cadena + bits_final_trama);
 
 begin
     ----- Components ------------------------------------------------------------------------------
@@ -78,7 +95,7 @@ begin
 
         if reset = '0' then
             contador_fin_cadena <= 0;
-            cadena_recibida     <= cadena_a;
+            cadena_recibida     <= All_leds_Off;
             led_end_s           <= '1';
 
         elsif (rising_edge(clk)) then
@@ -89,26 +106,57 @@ begin
             if rx_done = '1' then
                 contador_fin_cadena <= 0;
                 led_end_s           <= '1';
+                buzzer              <= '1';
             elsif contador_fin_cadena < cnt_max then
                 contador_fin_cadena <= contador_fin_cadena + 1;
                 led_end_s           <= '1';
+                buzzer              <= '1';
             else
                 led_end_s <= '0';
+                buzzer    <= '0';
 
             end if;
-
         end if;
-
     end process;
 
     --LED on/off
     process (cadena_recibida)
     begin
-        if cadena_recibida (1 to longitud_cadena) = cadena_e (1 to longitud_cadena) then
-            led_s <= '0';
-        elsif cadena_recibida (1 to longitud_cadena) = cadena_a (1 to longitud_cadena) then
-            led_s <= '1';
-        else
+
+        if cadena_recibida (1 to longitud_cadena) = All_leds_Off (1 to longitud_cadena) then
+            led_1 <= '1';
+            led_2 <= '1';
+            led_3 <= '1';
+            led_4 <= '1';
+            -- Apago Todos
+
+        elsif cadena_recibida (1 to longitud_cadena) = All_leds_On (1 to longitud_cadena) then
+            led_1 <= '0';
+            led_2 <= '0';
+            led_3 <= '0';
+            led_4 <= '0';
+            -- Enciendo Todos
+
+        elsif cadena_recibida (1 to longitud_cadena) = led_1_on (1 to longitud_cadena) then
+            led_1 <= '0';
+        elsif cadena_recibida (1 to longitud_cadena) = led_1_off (1 to longitud_cadena) then
+            led_1 <= '1';
+
+        elsif cadena_recibida (1 to longitud_cadena) = led_2_on (1 to longitud_cadena) then
+            led_2 <= '0';
+        elsif cadena_recibida (1 to longitud_cadena) = led_2_off (1 to longitud_cadena) then
+            led_2 <= '1';
+
+        elsif cadena_recibida (1 to longitud_cadena) = led_3_on (1 to longitud_cadena) then
+            led_3 <= '0';
+        elsif cadena_recibida (1 to longitud_cadena) = led_3_off (1 to longitud_cadena) then
+            led_3 <= '1';
+
+        elsif cadena_recibida (1 to longitud_cadena) = led_4_on (1 to longitud_cadena) then
+            led_4 <= '0';
+        elsif cadena_recibida (1 to longitud_cadena) = led_4_off (1 to longitud_cadena) then
+            led_4 <= '1';
+
         end if;
     end process;
 
@@ -126,7 +174,7 @@ begin
     end process;
 
     -- Conexion de señales
-    led     <= led_s;
-    led_end <= led_end_s;
+    led_end  <= led_end_s;
+    digito_1 <= '0';
 
 end architecture;
