@@ -32,7 +32,9 @@ entity control_lectura is
         rx_port : in std_logic;
 
         --output ports
-        --led     : out std_logic;
+        lcd_data                   : out std_logic_vector (7 downto 0);
+        lcd_enable, lcd_rw, lcd_rs : out std_logic;
+
         led_end  : out std_logic;
         buzzer   : out std_logic;
         digito_1 : out std_logic;
@@ -51,8 +53,6 @@ architecture a_control_lectura of control_lectura is
     ----- Typedefs --------------------------------------------------------------------------------
 
     ----- Constants -------------------------------------------------------------------------------
-    --constant cadena_e : string := "encendiDA"; -- DA lo manda la aplicacion
-    --constant cadena_a : string := "apagadoDA"; -- DA lo manda la aplicacion
     constant led_1_on     : string := "led 1 onDA";
     constant led_1_off    : string := "led 1 ofDA";
     constant led_2_on     : string := "led 2 onDA";
@@ -78,6 +78,8 @@ architecture a_control_lectura of control_lectura is
     signal led_s     : std_logic := '1';
     signal led_end_s : std_logic := '1';
 
+    -- display lcd
+
     -- contadores
     signal contador_fin_cadena : integer range 0 to cnt_max;
     signal caracter_cadena     : integer := (longitud_cadena + bits_final_trama);
@@ -87,6 +89,10 @@ begin
     receptor : entity work.rx_uart
         generic map(nbits_rx, cnt_max_rx, data_lenght_rx)
         port map(clk, reset, rx_port, rx_done, dato);
+
+    lcd : entity work.LCD_String
+        generic map(longitud_cadena + bits_final_trama)
+        port map(clk, reset, cadena_recibida, lcd_data, lcd_enable, lcd_rw, lcd_rs);
 
     ----- Codigo ----------------------------------------------------------------------------------
 

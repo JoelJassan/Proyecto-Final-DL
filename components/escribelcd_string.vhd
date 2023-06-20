@@ -4,13 +4,12 @@ use ieee.numeric_std.all;
 
 entity escribelcd_string is
 	generic (
-		cadena_e : string := "ON   ;";
-		cadena_a : string := "OFF  ;"
+		longitud_cadena : integer := 10
 	);
 
 	port (
 		clk, reset : in std_logic := '0';
-		led_signal : in std_logic;
+		pantalla   : in string (1 to longitud_cadena);
 
 		lcd_data                   : out std_logic_vector (7 downto 0);
 		lcd_enable, lcd_rw, lcd_rs : out std_logic
@@ -21,10 +20,10 @@ architecture a_escribelcd of escribelcd_string is
 	type mef is (reset0, delay1, delay2, delay3, delay4, delay5, seteo, seteo1, on_off_control, reseteo, modoEntrada, escribe1c, escribe_next_c, fin);
 begin
 
-	process (clk, reset, led_signal) is
-		variable estado              : mef;
-		variable cnt                 : integer   := 1;
-		variable led_signal_anterior : std_logic := '0';
+	process (clk, reset, pantalla) is
+		variable estado            : mef;
+		variable cnt               : integer := 1;
+		variable pantalla_anterior : string (1 to longitud_cadena);
 	begin
 		-- el comentario de la derecha se referencia por la otra mef (when estado_de_la_izquierda a comentario_de_la_derecha)
 		if (reset = '0') then
@@ -96,11 +95,7 @@ begin
 
 					-- LOGICA DE ESCRITURA --------------------------------------------------------
 				when escribe1c => estado := escribe_next_c;
-					if (led_signal = '0') then
-						LCD_DATA <= std_logic_vector(to_unsigned (character'pos(cadena_e(cnt)), 8));-- TRANSFORMO CADA ELEMENTO DEL STRING
-					elsif (led_signal = '1') then
-						LCD_DATA <= std_logic_vector(to_unsigned (character'pos(cadena_a(cnt)), 8));-- TRANSFORMO CADA ELEMENTO DEL STRING
-					end if;
+					LCD_DATA <= std_logic_vector(to_unsigned (character'pos(pantalla(cnt)), 8));-- TRANSFORMO CADA ELEMENTO DEL STRING
 
 					LCD_ENABLE <= '1';
 					LCD_RW     <= '0';
@@ -108,10 +103,10 @@ begin
 					cnt := cnt + 1;
 
 				when escribe_next_c =>
-					if cnt = (cadena_a'length) then
-						estado              := fin;
-						cnt                 := 1;
-						led_signal_anterior := led_signal;
+					if cnt = (pantalla'length) then
+						estado            := fin;
+						cnt               := 1;
+						pantalla_anterior := pantalla;
 					else
 						estado := escribe1c;
 						LCD_ENABLE <= '0';
@@ -121,7 +116,7 @@ begin
 					-- LOGICA DE ESCRITURA --------------------------------------------------------
 
 				when others =>
-					if led_signal_anterior = led_signal then
+					if pantalla_anterior = pantalla then
 						estado := fin;--estado de espera hasta que se presione reset nuevamente
 					else
 						estado := reset0;

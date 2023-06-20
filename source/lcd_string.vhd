@@ -6,12 +6,12 @@ use ieee.numeric_std.all;
 
 entity LCD_String is
     generic (
-        cadena_e : string := "ON   ;";
-        cadena_a : string := "OFF  ;"
+        longitud_cadena : integer := 10
     );
+
     port (
         clk, reset : in std_logic := '0';
-        led_signal : in std_logic;
+        cadena     : in string (1 to longitud_cadena); -- aqui si debe ingresar "cadena"
 
         lcd_data                   : out std_logic_vector (7 downto 0);
         lcd_enable, lcd_rw, lcd_rs : out std_logic
@@ -20,7 +20,8 @@ end LCD_String;
 
 architecture a_sw_lcd of LCD_String is
 
-    signal clks : std_logic;
+    signal clks     : std_logic;
+    signal pantalla : string (1 to longitud_cadena);
 
 begin
 
@@ -29,7 +30,12 @@ begin
         port map(clk, reset, '1', clks, open); --DIVISOR PARA LCD
 
     ins2 : entity work.escribelcd_string
-        generic map(cadena_e, cadena_a)
-        port map(clks, reset, led_signal, lcd_data, lcd_enable, lcd_rw, lcd_rs);
+        generic map(longitud_cadena)
+        port map(clks, reset, pantalla, lcd_data, lcd_enable, lcd_rw, lcd_rs); -- aqui se tiene que armar una mef para la pantalla
+
+    -- MODIFICACION JOEL
+
+    -- esto equivale a una mef futura
+    pantalla <= cadena;
 
 end a_sw_lcd;
