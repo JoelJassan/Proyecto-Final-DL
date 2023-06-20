@@ -32,7 +32,6 @@
 # ignore Quartus II generated files ---------------------------------------------------------------
 *.qpf
 *.qsf
-*.qar
 *.qws
 *.txt
 
