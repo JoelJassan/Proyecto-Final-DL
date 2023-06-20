@@ -124,21 +124,21 @@ begin
             led_1 <= '0';
         elsif cadena_recibida (1 to longitud_cadena) = led_1_off (1 to longitud_cadena) then
             led_1 <= '1';
-        end if;
+            --end if;
 
-        if cadena_recibida (1 to longitud_cadena) = led_2_on (1 to longitud_cadena) then
+        elsif cadena_recibida (1 to longitud_cadena) = led_2_on (1 to longitud_cadena) then
             led_2 <= '0';
         elsif cadena_recibida (1 to longitud_cadena) = led_2_off (1 to longitud_cadena) then
             led_2 <= '1';
-        end if;
+            --end if;
 
-        if cadena_recibida (1 to longitud_cadena) = led_3_on (1 to longitud_cadena) then
+        elsif cadena_recibida (1 to longitud_cadena) = led_3_on (1 to longitud_cadena) then
             led_3 <= '0';
         elsif cadena_recibida (1 to longitud_cadena) = led_3_off (1 to longitud_cadena) then
             led_3 <= '1';
-        end if;
+            --end if;
 
-        if cadena_recibida (1 to longitud_cadena) = led_4_on (1 to longitud_cadena) then
+        elsif cadena_recibida (1 to longitud_cadena) = led_4_on (1 to longitud_cadena) then
             led_4 <= '0';
         elsif cadena_recibida (1 to longitud_cadena) = led_4_off (1 to longitud_cadena) then
             led_4 <= '1';
