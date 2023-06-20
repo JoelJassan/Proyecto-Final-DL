@@ -28,7 +28,7 @@ architecture a_control_lectura_tb of control_lectura_tb is
     constant cnt_max        : integer := 100000;
     ----- Simulation ------------------------------------------------------------------------------
 
-    constant simulation_time : time := 22 ms;
+    constant simulation_time : time := 50 ms;
 
     constant clk_period      : time := 10 ns;
     constant reset_off_time  : time := 80 ns;
@@ -93,7 +93,7 @@ begin
         --
         --
         --
-        --- INICIO DE APAGADO
+        --- INICIO DE encendido
 
         -- dato 1
         data := x"6C";
@@ -174,17 +174,17 @@ begin
 
         current_time := now; --obtengo tiempo actual
         report "Tiempo transcurrido: " & time'image(current_time - start_time);
-        while now < 10 ms loop
+        while now < 9 ms loop
             wait for 1 ns;
-        end loop; -- espero hasta 11ms
+        end loop; -- espero hasta 9 ms
 
         --
         --
         --
-        --- INICIO DE APAGADO
+        --- INICIO DE apagado
 
         -- dato 1
-        data := x"61";
+        data := x"6C";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
@@ -195,7 +195,7 @@ begin
         wait for tiempo_de_pulso;
 
         -- dato 2
-        data := x"70";
+        data := x"65";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
@@ -206,39 +206,6 @@ begin
         wait for tiempo_de_pulso;
 
         -- dato 3
-        data := x"61";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --end
-        wait for tiempo_de_pulso;
-
-        -- dato 4
-        data := x"67";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --end
-        wait for tiempo_de_pulso;
-
-        -- dato 5
-        data := x"61";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --end
-        wait for tiempo_de_pulso;
-
-        -- dato 6
         data := x"64";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
@@ -249,8 +216,268 @@ begin
         rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
-        -- dato 7
-        data := x"6F";
+        -- dato 4
+        data := x"20";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 5
+        data := x"31";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- retorno de carry
+        data := x"0D";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- avance de linea
+        data := x"0A";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        current_time := now; --obtengo tiempo actual
+        report "Tiempo transcurrido: " & time'image(current_time - start_time);
+        while now < 18 ms loop
+            wait for 1 ns;
+        end loop;
+
+        -- dato 1
+        data := x"6C";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 2
+        data := x"65";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 3
+        data := x"64";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 4
+        data := x"20";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 5
+        data := x"31";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- retorno de carry
+        data := x"0D";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- avance de linea
+        data := x"0A";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        current_time := now; --obtengo tiempo actual
+        report "Tiempo transcurrido: " & time'image(current_time - start_time);
+        while now < 27 ms loop
+            wait for 1 ns;
+        end loop;
+
+        -- dato 1
+        data := x"6C";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 2
+        data := x"65";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 3
+        data := x"64";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 4
+        data := x"20";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 5
+        data := x"31";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- retorno de carry
+        data := x"0D";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- avance de linea
+        data := x"0A";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        current_time := now; --obtengo tiempo actual
+        report "Tiempo transcurrido: " & time'image(current_time - start_time);
+        while now < 36 ms loop
+            wait for 1 ns;
+        end loop;
+
+        -- dato 1
+        data := x"6C";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 2
+        data := x"65";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 3
+        data := x"64";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 4
+        data := x"20";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 5
+        data := x"31";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
