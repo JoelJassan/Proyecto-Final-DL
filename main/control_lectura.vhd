@@ -60,8 +60,8 @@ architecture a_control_lectura of control_lectura is
     constant led_3_off    : string := "led 3 ofDA";
     constant led_4_on     : string := "led 4 onDA";
     constant led_4_off    : string := "led 4 ofDA";
-    constant All_leds_On  : string := "ledsAlonDA";
-    constant All_leds_Off : string := "ledsAlofDA";
+    constant All_leds_On  : string := "AlledsOnDA";
+    constant All_leds_Off : string := "AlledsOfDA";
 
     constant bits_final_trama : integer := 2;
     --constant longitud_cadena  : integer := cadena_e'length - bits_final_trama;
@@ -120,30 +120,41 @@ begin
     process (cadena_recibida)
     begin
 
-        if cadena_recibida (1 to longitud_cadena) = led_1_on (1 to longitud_cadena) then
+        if cadena_recibida (1 to longitud_cadena) = All_leds_Off (1 to longitud_cadena) then
+            led_1 <= '1';
+            led_2 <= '1';
+            led_3 <= '1';
+            led_4 <= '1';
+            -- Apago Todos
+
+        elsif cadena_recibida (1 to longitud_cadena) = All_leds_On (1 to longitud_cadena) then
+            led_1 <= '0';
+            led_2 <= '0';
+            led_3 <= '0';
+            led_4 <= '0';
+            -- Enciendo Todos
+
+        elsif cadena_recibida (1 to longitud_cadena) = led_1_on (1 to longitud_cadena) then
             led_1 <= '0';
         elsif cadena_recibida (1 to longitud_cadena) = led_1_off (1 to longitud_cadena) then
             led_1 <= '1';
-            --end if;
 
         elsif cadena_recibida (1 to longitud_cadena) = led_2_on (1 to longitud_cadena) then
             led_2 <= '0';
         elsif cadena_recibida (1 to longitud_cadena) = led_2_off (1 to longitud_cadena) then
             led_2 <= '1';
-            --end if;
 
         elsif cadena_recibida (1 to longitud_cadena) = led_3_on (1 to longitud_cadena) then
             led_3 <= '0';
         elsif cadena_recibida (1 to longitud_cadena) = led_3_off (1 to longitud_cadena) then
             led_3 <= '1';
-            --end if;
 
         elsif cadena_recibida (1 to longitud_cadena) = led_4_on (1 to longitud_cadena) then
             led_4 <= '0';
         elsif cadena_recibida (1 to longitud_cadena) = led_4_off (1 to longitud_cadena) then
             led_4 <= '1';
-        end if;
 
+        end if;
     end process;
 
     --contador longitud de cadena
