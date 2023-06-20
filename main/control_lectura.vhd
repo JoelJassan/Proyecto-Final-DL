@@ -65,8 +65,7 @@ architecture a_control_lectura of control_lectura is
     constant All_leds_Off : string := "AlledsOfDA";
 
     constant bits_final_trama : integer := 2;
-    --constant longitud_cadena  : integer := cadena_e'length - bits_final_trama;
-    constant longitud_cadena : integer := (led_1_on'length - bits_final_trama);
+    constant longitud_cadena  : integer := (led_1_on'length - bits_final_trama);
 
     ----- Signals ---------------------------------------------------------------------------------
     -- receptor uart
@@ -175,7 +174,6 @@ begin
     end process;
 
     -- Conexion de señales
-    --led     <= led_s;
     led_end  <= led_end_s;
     digito_1 <= '0';
 
