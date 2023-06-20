@@ -46,9 +46,14 @@ architecture a_control_lectura of control_lectura is
     ----- Constants -------------------------------------------------------------------------------
     constant cadena_e : string := "encendiDA"; -- DA lo manda la aplicacion
     constant cadena_a : string := "apagadoDA"; -- DA lo manda la aplicacion
+    constant led_1    : string := "led 1DA";
+    constant led_2    : string := "led 2DA";
+    constant led_3    : string := "led 3DA";
+    constant led_4    : string := "led 4DA";
 
     constant bits_final_trama : integer := 2;
-    constant longitud_cadena  : integer := cadena_e'length - bits_final_trama;
+    --constant longitud_cadena  : integer := cadena_e'length - bits_final_trama;
+    constant longitud_cadena : integer := led_1'length - bits_final_trama;
 
     ----- Signals ---------------------------------------------------------------------------------
     -- receptor uart
@@ -56,14 +61,14 @@ architecture a_control_lectura of control_lectura is
     signal dato    : std_logic_vector(data_lenght_rx - 1 downto 0);
 
     -- procesamiento
-    signal cadena_recibida : string (1 to cadena_e'length);
+    signal cadena_recibida : string (1 to longitud_cadena + bits_final_trama);
 
     signal led_s     : std_logic := '1';
     signal led_end_s : std_logic := '1';
 
     -- contadores
     signal contador_fin_cadena : integer range 0 to cnt_max;
-    signal caracter_cadena     : integer := cadena_e'length;
+    signal caracter_cadena     : integer := longitud_cadena + bits_final_trama;
 
 begin
     ----- Components ------------------------------------------------------------------------------
@@ -104,12 +109,20 @@ begin
     --LED on/off
     process (cadena_recibida)
     begin
-        if cadena_recibida (1 to longitud_cadena) = cadena_e (1 to longitud_cadena) then
-            led_s <= '0';
-        elsif cadena_recibida (1 to longitud_cadena) = cadena_a (1 to longitud_cadena) then
-            led_s <= '1';
+
+        if cadena_recibida (1 to longitud_cadena) = led_1 (1 to longitud_cadena) then
+            led_s <= not led_s;
+            --elsif cadena_recibida (1 to longitud_cadena) = cadena_a (1 to longitud_cadena) then
+            --    led_s <= '1';
         else
         end if;
+
+        --if cadena_recibida (1 to longitud_cadena) = cadena_e (1 to longitud_cadena) then
+        --    led_s <= '0';
+        --elsif cadena_recibida (1 to longitud_cadena) = cadena_a (1 to longitud_cadena) then
+        --    led_s <= '1';
+        --else
+        --end if;
     end process;
 
     --contador longitud de cadena

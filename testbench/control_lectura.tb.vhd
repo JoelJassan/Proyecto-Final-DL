@@ -96,7 +96,7 @@ begin
         --- INICIO DE APAGADO
 
         -- dato 1
-        data := x"65";
+        data := x"6C";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
@@ -107,28 +107,6 @@ begin
         wait for tiempo_de_pulso;
 
         -- dato 2
-        data := x"6E";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --end
-        wait for tiempo_de_pulso;
-
-        -- dato 3
-        data := x"63";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --end
-        wait for tiempo_de_pulso;
-
-        -- dato 4
         data := x"65";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
@@ -139,18 +117,7 @@ begin
         rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
-        -- dato 5
-        data := x"6E";
-        rx_port <= '0'; --start
-        wait for tiempo_de_pulso;
-        for i in 0 to 7 loop
-            rx_port <= data(i);
-            wait for tiempo_de_pulso;
-        end loop;
-        rx_port <= '1'; --end
-        wait for tiempo_de_pulso;
-
-        -- dato 6
+        -- dato 3
         data := x"64";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
@@ -161,8 +128,19 @@ begin
         rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
-        -- dato 7
-        data := x"69";
+        -- dato 4
+        data := x"20";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 5
+        data := x"31";
         rx_port <= '0'; --start
         wait for tiempo_de_pulso;
         for i in 0 to 7 loop
