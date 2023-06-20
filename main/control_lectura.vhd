@@ -34,6 +34,7 @@ entity control_lectura is
         --output ports
         --led     : out std_logic;
         led_end  : out std_logic;
+        buzzer   : out std_logic;
         digito_1 : out std_logic;
 
         led_1 : out std_logic;
@@ -106,11 +107,14 @@ begin
             if rx_done = '1' then
                 contador_fin_cadena <= 0;
                 led_end_s           <= '1';
+                buzzer              <= '1';
             elsif contador_fin_cadena < cnt_max then
                 contador_fin_cadena <= contador_fin_cadena + 1;
                 led_end_s           <= '1';
+                buzzer              <= '1';
             else
                 led_end_s <= '0';
+                buzzer    <= '0';
 
             end if;
         end if;
