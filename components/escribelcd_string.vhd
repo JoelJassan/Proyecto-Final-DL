@@ -4,7 +4,7 @@ use ieee.numeric_std.all;
 
 entity escribelcd_string is
 	generic (
-		longitud_cadena : integer := 10
+		longitud_cadena : integer := 16
 	);
 
 	port (

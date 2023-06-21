@@ -20,7 +20,7 @@ end LCD_String;
 
 architecture a_sw_lcd of LCD_String is
 
-    constant longitud_cadena : integer := 80;
+    constant longitud_cadena : integer := 11;
 
     signal clks     : std_logic;
     signal pantalla : string (1 to longitud_cadena);
@@ -37,4 +37,14 @@ begin
     -- MODIFICACION JOEL
 
     -- esto equivale a una mef futura
+    process (leds_array)
+    begin
+        case leds_array is
+
+            when "1111" => pantalla <= "All Leds Of";
+            when "0000" => pantalla <= "All Leds On";
+            when others => pantalla <= "NNNNNNNNNNN";
+
+        end case;
+    end process;
 end a_sw_lcd;
