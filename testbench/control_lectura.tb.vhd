@@ -44,12 +44,17 @@ architecture a_control_lectura_tb of control_lectura_tb is
     signal rx_port : std_logic;
 
     --component outputs
-    signal led : std_logic;
+    signal led_end : std_logic;
+
+    signal lcd_data                   : std_logic_vector (7 downto 0);
+    signal lcd_enable, lcd_rw, lcd_rs : std_logic;
+    signal buzzer, digito_1           : std_logic;
+    signal led_1, led_2, led_3, led_4 : std_logic;
 begin
     ----- Component to validate -------------------------------------------------------------------
     leer : entity work.control_lectura
         generic map(nbits_rx, cnt_max_rx, data_lenght_rx, cnt_max)
-        port map(clk_i, rst_i, rx_port, led);
+        port map(clk_i, rst_i, rx_port, lcd_data, lcd_enable, lcd_rw, lcd_rs, led_end, buzzer, digito_1, led_1, led_2, led_3, led_4);
     ----- Code ------------------------------------------------------------------------------------
 
     -- clock stimulus
@@ -150,6 +155,39 @@ begin
         rx_port <= '1'; --end
         wait for tiempo_de_pulso;
 
+        -- dato 6
+        data := x"20";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 7
+        data := x"6F";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
+        -- dato 8
+        data := x"6E";
+        rx_port <= '0'; --start
+        wait for tiempo_de_pulso;
+        for i in 0 to 7 loop
+            rx_port <= data(i);
+            wait for tiempo_de_pulso;
+        end loop;
+        rx_port <= '1'; --end
+        wait for tiempo_de_pulso;
+
         -- retorno de carry
         data := x"0D";
         rx_port <= '0'; --start
@@ -171,6 +209,8 @@ begin
         end loop;
         rx_port <= '1'; --end
         wait for tiempo_de_pulso;
+
+        wait;
 
         current_time := now; --obtengo tiempo actual
         report "Tiempo transcurrido: " & time'image(current_time - start_time);

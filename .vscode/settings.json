@@ -5,7 +5,7 @@
     "git.confirmSync": false,
     "workbench.colorTheme": "Visual Studio Dark - C++",
   
-    "editor.formatOnSave": true,
+    "editor.formatOnSave": false,
     "[c]": {
       "editor.defaultFormatter": "ms-vscode.cpptools",
       "editor.wordBasedSuggestions": false,
