@@ -39,8 +39,7 @@ El archivo .gitignore incluye todas las extensiones que genera Quartus 2, ModelS
 ## Formateador de codigo
 
 VHDL Formatter
-El proyecto tiene un "settings.json" integrado, por lo que deberia funcionar con este. De igual forma,
-se deja la configuracion usada
+El proyecto tiene un "settings.json" integrado, por lo que deberia funcionar con este. De igual forma, se deja la configuracion usada. [^1]
 
 En settings.json:
 
@@ -56,7 +55,7 @@ En settings.json:
     "vhdl.formatter.align.all"
 ]
 ```
-> Nota: al final del proyecto tuve que desactivar el formateador, porque deformaba lo que se escribe en pantalla. Si ocurre esto, basta con poner     `"editor.formatOnSave": false,`
+[^1]: al final del proyecto tuve que desactivar el formateador, porque deformaba lo que se escribe en pantalla. Si ocurre esto, basta con poner     `"editor.formatOnSave": false,`
 
 
 ## Forma de Uso
@@ -65,6 +64,9 @@ Se espera la siguiente estructura de proyecto:
 
 ```
 DIRECTORIO_DEL_PROYECTO
+|- .vscode
+|   |- settings.json
+|
 |- components
 |   |- archivos individuales (sin dependencias)
 |
@@ -80,6 +82,7 @@ DIRECTORIO_DEL_PROYECTO
 |- testbench
 |   |- archivos de testbench
 |
+archivo.ghw (simulacion de GTKWave)
 .gitignore
 LICENSE.txt
 makefile
@@ -90,11 +93,11 @@ Se estableceran las instrucciones para el uso del makefile con comandos make.
 
 Previo a ejecutar un proyecto personal, se debe ingresar al makefile y configurar los siguientes parametros:
 
-- `MAIN_FILE`: archivo a evaluar en testbench
+- `MAIN_FILE`: archivo a evaluar en testbench [^2], [^3]
 - `TIME` : tiempo total de la simulacion
 
-> Nota 1: puede que necesite cambiar el nombre de los directorios en la etiqueta #directorios del makefile (linea 1).
-> Nota 2: makefile espera que el archivo de testbench tenga el mismo nombre que su archivo fuente. En caso de que sea distinto, reemplazar SRC_FILE en las lineas de makefile correspondientes.
+[^2]: Nota 1: puede que necesite cambiar el nombre de los directorios en la etiqueta #directorios del makefile (linea 1).
+[^3]: Nota 2: makefile espera que el archivo de testbench tenga el mismo nombre que su archivo fuente. En caso de que sea distinto, reemplazar SRC_FILE en las lineas de makefile correspondientes.
 
 Para realizar un proyecto personal, desde su compilacion hasta la visualizacion en GtkView, ejecutar:
 
@@ -115,4 +118,4 @@ Para realizar un proyecto personal, desde su compilacion hasta la visualizacion 
 
 # Licencia
 
-Este código tiene licencia MIT. Ver [LICENSE.txt]().
+Este código tiene licencia MIT. Ver [LICENSE.txt](https://github.com/JoelJassan/Proyecto-Final-DL/blob/main/LICENSE.txt).
