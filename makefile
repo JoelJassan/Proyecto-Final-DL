@@ -48,8 +48,8 @@ run:
 view:
 	gtkwave $(VCD_FILE)
 
-vcd:
-	touch tmp.vcd
+ghw:
+	touch tmp.ghw
 
 #se podria agregar instruccion para entrar a vcd directamente
 clean:
