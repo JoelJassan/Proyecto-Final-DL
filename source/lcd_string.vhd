@@ -20,7 +20,7 @@ end LCD_String;
 
 architecture a_sw_lcd of LCD_String is
 
-    constant longitud_cadena : integer := 11;
+    constant longitud_cadena : integer := 58;
 
     signal clks     : std_logic;
     signal pantalla : string (1 to longitud_cadena);
@@ -40,10 +40,31 @@ begin
     process (leds_array)
     begin
         case leds_array is
+            ---------------------------"|0      |8      |16     |24     |32     |40     |48     |56     |64     |72     |80"
+            -- todo apagado
+            when "1111" => pantalla <= "L1:Off -- L2:Off------------------------L3:Off -- L4:Off ;"; 
+            
+            when "1110" => pantalla <= "L1:Off -- L2:Off------------------------L3:Off -- L4:On  ;";
+            when "1101" => pantalla <= "L1:Off -- L2:Off------------------------L3:On  -- L4:Off ;";
+            when "1100" => pantalla <= "L1:Off -- L2:Off------------------------L3:On  -- L4:On  ;";
 
-            when "1111" => pantalla <= "All Leds Of";
-            when "0000" => pantalla <= "All Leds On";
-            when others => pantalla <= "NNNNNNNNNNN";
+            when "1011" => pantalla <= "L1:Off -- L2:On ------------------------L3:Off -- L4:Off ;";
+            when "1010" => pantalla <= "L1:Off -- L2:On ------------------------L3:Off -- L4:On  ;";
+            when "1001" => pantalla <= "L1:Off -- L2:On ------------------------L3:On  -- L4:Off ;";
+            when "1000" => pantalla <= "L1:Off -- L2:On ------------------------L3:On  -- L4:On  ;";
+
+            when "0111" => pantalla <= "L1:On  -- L2:Off------------------------L3:Off -- L4:Off ;";
+            when "0110" => pantalla <= "L1:On  -- L2:Off------------------------L3:Off -- L4:On  ;";
+            when "0101" => pantalla <= "L1:On  -- L2:Off------------------------L3:On  -- L4:Off ;";
+            when "0100" => pantalla <= "L1:On  -- L2:Off------------------------L3:On  -- L4:On  ;";
+
+            when "0011" => pantalla <= "L1:On  -- L2:On ------------------------L3:Off -- L4:Off ;";
+            when "0010" => pantalla <= "L1:On  -- L2:On ------------------------L3:Off -- L4:On  ;";
+            when "0001" => pantalla <= "L1:On  -- L2:On ------------------------L3:On  -- L4:Off ;";
+
+            when "0000" => pantalla <= "L1:On  -- L2:On ------------------------L3:On  -- L4:On  ;";
+
+            when others => pantalla <= "NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN ;";
 
         end case;
     end process;

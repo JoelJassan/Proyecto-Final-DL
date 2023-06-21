@@ -81,7 +81,7 @@ architecture a_control_lectura of control_lectura is
     -- display lcd
     constant cantidad_de_leds : integer := 4;
     signal leds_array         : std_logic_vector (cantidad_de_leds - 1 downto 0);
-    signal temp               : std_logic_vector (cantidad_de_leds - 1 downto 0);
+    --signal temp               : std_logic_vector (cantidad_de_leds - 1 downto 0);
 
     -- contadores
     signal contador_fin_cadena : integer range 0 to cnt_max;
@@ -101,7 +101,7 @@ begin
         port map(clk, reset, leds_array, lcd_data, lcd_enable, lcd_rw, lcd_rs);
 
     ----- Codigo ----------------------------------------------------------------------------------
-    temp <= led_1_s & led_2_s & led_3_s & led_4_s;
+    leds_array <= led_1_s & led_2_s & led_3_s & led_4_s;
 
     process (clk, reset)
     begin
