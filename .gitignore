@@ -38,6 +38,9 @@
 *.qarlog
 *.rpt
 
+*.jic
+*.map
+
 
 # ignore Quartus II generated folders -------------------------------------------------------------
 */db/
